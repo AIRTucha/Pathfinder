@@ -375,30 +375,10 @@ merge append char url1 url2 =
                 
                 _ ->
                     [url2] 
-    
-
--- devider : ( Char -> SubURL -> URL -> URL ) -> Char -> SubURL -> URL -> URL
--- devider packer char url1 url2 =
---     case url2 of
---         OrderedURL char1 sub1 nextURL1 ->
---             OrderedURL char1 sub1 <| devider packer char nextURL1 url2
-
---         UnorderedURL char1 currURL nextURL ->
---             UnorderedURL char1 currURL <| devider packer char nextURL url2
-        
---         URLNode sub1 ->
---             packer char sub1 url2
-
---         URLEnd ->
---             URLEnd
 
 
 orderedPacker =
     OrderedURL 
-
-
--- unorderedPacker char sub1 url2 =
---     UnorderedURL char [sub1] url2
 
 
 break: Char -> String -> Result String ( String, String )
