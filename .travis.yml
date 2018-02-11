@@ -16,7 +16,7 @@ os:
 
 install:
   - npm install
-  - npm run elm package install
+  - npm run elm package install --yes
 
 script:
   - npm run test
