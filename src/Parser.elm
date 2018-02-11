@@ -32,6 +32,7 @@ type URLValue
     | Query (Dict String String)
     | Succes
 
+
 toString url =
     case url of 
         OrderedURL char url1 url2 ->
@@ -45,22 +46,17 @@ toString url =
                 ParsePath path ->
                     "Path " ++ path   
                 
-                
                 ParseFloat ->
                     "Float"
-
 
                 ParseInt ->
                     "Int"
                 
-                
                 ParseStr ->
                     "String"
 
-
                 ParseAny ->
                     "Any"
-    
     
                 ParseQuery ->
                     "Query"
@@ -108,6 +104,7 @@ parser value string =
         Err err ->
             Failure err
 
+
 parsingLoop : URL -> (List URLValue) -> String -> Maybe Char -> Result (String) ( List URLValue, String )
 parsingLoop url result string tailChar =
     case url of
@@ -117,7 +114,6 @@ parsingLoop url result string tailChar =
                     parsingLoop nextURL newResult newString tailChar
 
                 a -> a
-                
 
         NodeURL node ->
             case tailChar of
@@ -128,7 +124,6 @@ parsingLoop url result string tailChar =
                 
                 Nothing ->
                     parseNode result node (string, "")
-
 
         UnorderedURL char urls ->
             urls
@@ -151,7 +146,6 @@ parseUnordered char tailChar string prevUrls result curResult urls =
                             |> flattenUtilFailure []
                             |> Result.map (\ v -> ( v, string) )
 
-
                     head :: tail ->
                         if 0 < List.length curResult then 
                             parseUnordered char tailChar string [] newResult [] prevUrls
@@ -162,10 +156,8 @@ parseUnordered char tailChar string prevUrls result curResult urls =
                                     |> List.map (Tuple.second >> toString)
                                     |> String.join " or "
                             in
-                                
-                            Err <| "Start of " ++ string ++ " does not have any value which can be corectly parsed by: " ++ template ++ ", separated by " ++ fromChar char ++ "."
+                               Err <| "Start of " ++ string ++ " does not have any value which can be corectly parsed by: " ++ template ++ ", separated by " ++ fromChar char ++ "."
                     
-
         (i, url) :: restOfUrls ->
             let 
                 newTailChar = 
@@ -192,7 +184,6 @@ flattenUtilFailure accum result =
             case findFailure head of
                 Just err ->
                     Err err
-
 
                 Nothing ->
                     flattenUtilFailure (List.append head accum) tail
@@ -225,30 +216,26 @@ parseNode result node strings =
         ParsePath path ->
             checkEqual path strings
                 |> ignorValue result
-        
 
         ParseFloat ->
             parseValue String.toFloat strings
                 |> packValue Floating result
         
-
         ParseInt ->
             parseValue String.toInt strings
                 |> packValue Interger result
-
                         
         ParseStr ->
             parseValue Ok strings
                 |> packValue Str result
 
-
         ParseAny ->
             Ok (result, Tuple.second strings)
-
 
         ParseQuery ->
             parseValue parseQuery strings
                 |> packValue Query result
+
 
 parseValue parse (head, tail) =
     parse head
@@ -280,10 +267,8 @@ partitionLift (succes, failure) list =
         [] ->
             ( succes, failure )
 
-
         (Ok head) :: tail ->
             partitionLift ( head :: succes, failure ) tail
-        
 
         (Err head) :: tail ->
             partitionLift ( succes, head :: failure ) tail
@@ -328,10 +313,14 @@ makeValue list =
         [] ->
             Succes
 
+
 -- (</>): URL -> URL -> URL
 (</>) = orderedDevider '/'
 
+
+
 (<=>) = orderedDevider '='
+
 
 -- (<?>): URL -> URL -> URL
 (<?>) = orderedDevider '?'
@@ -339,6 +328,8 @@ makeValue list =
 
 -- (<&>): URL -> URL -> URL
 (<&>) = unorderedDevider '&'
+
+
 
 (<*>) = unorderedDevider '*'
 
@@ -352,13 +343,11 @@ unorderedDevider char url1 url2 =
         OrderedURL _ a _ ->
             merge ( (::) url1 ) char url1 url2
 
-
         UnorderedURL char1 urls1 ->
             if char1 == char then 
                 merge ( List.append urls1 ) char url1 url2
             else 
                 merge ( (::) url1 ) char url1 url2
-        
 
         NodeURL a ->
             merge ( (::) url1 ) char url1 url2
@@ -376,7 +365,3 @@ merge append char url1 url2 =
                 
                 _ ->
                     [url2] 
-
-
-orderedPacker =
-    OrderedURL 

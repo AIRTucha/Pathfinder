@@ -9,6 +9,7 @@ break char string =
         Just ( head, tail ) ->
             Ok ( head, tail )
 
+
         Nothing ->
             Err <| string ++ " does not contain " ++ (fromChar char)
 
@@ -22,5 +23,6 @@ splitOnce char head tail =
             else 
                 splitOnce char (head ++ fromChar first) rest
         
+
         Nothing ->
             Nothing
