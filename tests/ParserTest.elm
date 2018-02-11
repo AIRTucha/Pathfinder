@@ -1,6 +1,6 @@
 module ParserTest exposing (..)
 
-
+import Break exposing (break)
 import Expect exposing (Expectation)
 import Test exposing (..)
 import Parser exposing (..)
