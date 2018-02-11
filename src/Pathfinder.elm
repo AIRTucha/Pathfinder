@@ -1,4 +1,8 @@
-module Parser exposing(..)
+module Pathfinder exposing(..)
+
+{-| The libraty contain two main parts:
+-}
+
 
 import Break exposing (break)
 import List exposing (reverse)
@@ -8,6 +12,11 @@ import Maybe
 import Result
 import Tuple 
 
+-- TYPES
+
+
+{-| Parsing options
+-}
 type SubURL 
     = ParsePath String
     | ParseFloat
@@ -17,12 +26,16 @@ type SubURL
     | ParseQuery
 
 
+{-| Nodes of parsing tree
+-}
 type URL
     = OrderedURL Char URL URL
     | UnorderedURL Char (List URL)
     | NodeURL SubURL
 
 
+{-| Possible parsing results
+-}
 type URLValue
     = Interger Int
     | Floating Float
@@ -32,14 +45,74 @@ type URLValue
     | Query (Dict String String)
     | Succes
 
+-- SHORTHCUTS FOR BUILDING OF PARSING TREE
 
+
+{-| A shorthcut for creation of a parsing node for Float
+
+    parse float "3.1415" 
+-}
+float : URL
+float =
+    NodeURL ParseFloat
+
+
+{-| A shorthcut for creation of a parsing node for Int
+
+    parse int "13" 
+-}
+int : URL
+int =
+    NodeURL ParseInt
+
+
+{-| A shorthcut for creation of a parsing node which specifes presice part of a path
+
+    parse (p "someUrl" </> int ) "someUrl/10"
+-}
+p : String -> URL
+p string =
+    NodeURL <| ParsePath string
+
+
+{-| A shorthcut for creation of a parsing node for String
+
+    parse str "name"
+-}
+str: URL 
+str = 
+    NodeURL ParseStr
+
+
+{-| A shorthcut for creation of a parsing node which skips a patr of the path
+
+    parse (int </> any </> float) "10/some&strange?stuff/3.1415"
+-}
+any: URL
+any = 
+    NodeURL ParseAny
+
+
+{-| A shorthcut for creation of a parsing node for an old good url query
+
+    parse (query) "value1=10&value2=13&value3=name"
+-}
+query : URL
+query =
+    NodeURL ParseQuery
+
+
+{-| Create a string which desribes the path, it is very useful for debugging
+
+    toString (int </> float)  -- ( Int ) / ( Float )
+-}
 toString url =
     case url of 
         OrderedURL char url1 url2 ->
-            "OrderedURL(" ++ (fromChar char) ++ " " ++ toString url1 ++ " " ++ toString url2 ++ ")"
+            "( " ++ toString url1 ++ " ) " ++ (fromChar char) ++ " ( " ++ toString url2 ++ " )"
 
         UnorderedURL char subUrls ->
-            "UnorderedURL(" ++ (fromChar char) ++ " " ++ String.join " " (List.map toString subUrls) 
+            "( " ++ String.join (" ) " ++ (fromChar char) ++ " ( ") (List.map toString subUrls) ++ " )" 
 
         NodeURL node ->
             case node of
@@ -62,38 +135,8 @@ toString url =
                     "Query"
 
 
-p : String -> URL
-p string =
-    NodeURL <| ParsePath string
-
-
-float : URL
-float =
-    NodeURL ParseFloat
-
-
-int : URL
-int =
-    NodeURL ParseInt
-
-
-str: URL 
-str = 
-    NodeURL ParseStr
-
-
-any: URL
-any = 
-    NodeURL ParseAny
-
-
-query : URL
-query =
-    NodeURL ParseQuery
-
-
-parser : URL -> String -> URLValue
-parser value string =
+parse : URL -> String -> URLValue
+parse value string =
     case parsingLoop value [] string Nothing of
         Ok ( result, "" ) ->
             makeValue result

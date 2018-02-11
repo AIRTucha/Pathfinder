@@ -1,8 +1,0 @@
-{
-    "verbose": false,
-    "ignore": [
-        "dist",
-        "public"
-    ],
-    "ext": "json js ts css html elm"
-}
