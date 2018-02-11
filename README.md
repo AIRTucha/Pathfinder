@@ -11,7 +11,7 @@ The libraty contain two main parts:
 # Examples
 
 Parsing of a string form a very simple path.
-``` 
+```elm
 parseName: String -> Maybe String
 parseName url =
     case parse (p "someUrl" </> str) url of
@@ -24,7 +24,7 @@ parseName url =
 parseName "someUrl/userName"  -- Just "userName"
 ```
 Parsing of an integer from a path which contains a query.
-```
+```elm
 parseQuery: String -> Maybe Int
 parseQuery url =
     case parse (p "someUrl" <?> (p "age" <=> int)) url of
@@ -37,7 +37,7 @@ parseQuery url =
 parseQuery "someUrl?age=10"  -- Just 10
 ```
 Parsing of multiple values.
-```
+```elm
 parseNameAndId: String -> Just ( String, Int )
 parseNameAndId url = 
     case parse (p "someUrl" </> str </> int </> any ) url of
@@ -50,7 +50,7 @@ parseNameAndId url =
 parseNameAndId "someUrl/userName/1/someRandomStuff"  -- Just ("userName", 1
 ```
 Error handling in case of unsuccesful parsing.
-```
+```elm
 getDevider: String -> Result String Float
 getDevider url =
     case parse any </> float of
