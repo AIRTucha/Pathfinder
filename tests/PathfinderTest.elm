@@ -66,7 +66,7 @@ suite =
                 let
                     resultHanlder result =
                        case result of 
-                            Interger age ->
+                            Integer age ->
                                 Just age
                             
                             _ ->
@@ -81,7 +81,7 @@ suite =
                 let
                     resultHanlder result =
                        case result of 
-                            MultyValue [ Str name, Interger id] ->
+                            MultiValue [ Str name, Integer id] ->
                                 Just (name, id)
                             
                             _ ->
@@ -297,12 +297,12 @@ suite =
                     \_ ->
                         "test?name=testName&age=18"
                             |> parse (p "test" <?>((p "name" <=> str) <&> (p "age" <=> int) ))
-                            |> Expect.equal ( MultyValue [Str "testName", Interger 18 ])
+                            |> Expect.equal ( MultiValue [Str "testName", Integer 18 ])
                 , test "url and typical query from two values, inverted" <|
                     \_ ->
                         "test?age=18&name=testName"
                             |> parse (p "test" <?>((p "name" <=> str) <&> (p "age" <=> int) ))
-                            |> Expect.equal ( MultyValue [Str "testName", Interger 18 ])
+                            |> Expect.equal ( MultiValue [Str "testName", Integer 18 ])
                 , test "multiple urls" <|
                     \_ ->
                         "test1/test2/test3?name"
@@ -317,36 +317,36 @@ suite =
                     \_ ->
                         "test1/test2?18&name/test3"
                             |> parse ( p "test1" </> p "test2" <?> (p "name" <&> int) </> p "test3")
-                            |> Expect.equal ( Interger 18 )
+                            |> Expect.equal ( Integer 18 )
                 ]
             , describe "Ordered sub tree"
                 [ test "tree and int" <|
                     \_ ->
                         testStr1 ++ "/" ++ testStr2 ++ "/10"
                             |> parse ( (p testStr1 </> p testStr2) </> int )
-                            |> Expect.equal ( Interger 10 )
+                            |> Expect.equal ( Integer 10 )
                 , test "tree or int" <|
                     \_ ->
                         (testStr1 ++ "/" ++ testStr2) ++ "*10"
                             |> parse ( (p testStr1 </> p testStr2) <*> int )
-                            |> Expect.equal ( Interger 10 )
+                            |> Expect.equal ( Integer 10 )
                 ]
             , describe "Unordered sub tree"
                 [ test "tree and int" <|
                     \_ ->
                         (testStr1 ++ "&" ++ testStr2) ++ "/10"
                             |> parse ( (p testStr1 <&> p testStr2) </> int )
-                            |> Expect.equal ( Interger 10 )
+                            |> Expect.equal ( Integer 10 )
                 , test "tree or int, same devider" <|
                     \_ ->
                         (testStr1 ++ "*" ++ testStr2) ++ "*10"
                             |> parse ( (p testStr1 <*> p testStr2) <*> int )
-                            |> Expect.equal ( Interger 10 )
+                            |> Expect.equal ( Integer 10 )
                 , test "tree or int, different deviders" <|
                     \_ ->
                         (testStr1 ++ "*" ++ testStr2) ++ "&10"
                             |> parse ( (p testStr1 <*> p testStr2) <&> int )
-                            |> Expect.equal ( Interger 10 )
+                            |> Expect.equal ( Integer 10 )
                 ]
 
             , describe "Path"
@@ -366,7 +366,7 @@ suite =
                             \_ ->
                                 testStr ++ "/10"
                                     |> parse (p testStr </> int)
-                                    |> Expect.equal ( Interger 10 ) 
+                                    |> Expect.equal ( Integer 10 ) 
                         , test "path and float" <|
                             \_ ->
                                 testStr ++ "/3.1415"
@@ -399,7 +399,7 @@ suite =
                                 \_ ->
                                     testStr ++ "&10"
                                         |> parse (p testStr <&> int)
-                                        |> Expect.equal ( Interger 10 ) 
+                                        |> Expect.equal ( Integer 10 ) 
                             , test "path or float" <|
                                 \_ ->
                                     testStr ++ "&3.1415"
@@ -431,7 +431,7 @@ suite =
                                 \_ ->
                                     "10&" ++ testStr
                                         |> parse (p testStr <&> int)
-                                        |> Expect.equal ( Interger 10 ) 
+                                        |> Expect.equal ( Integer 10 ) 
                             , test "path or float" <|
                                 \_ ->
                                     "3.1415&" ++ testStr
@@ -470,7 +470,7 @@ suite =
                         \_ ->
                                 testStr1 ++ "&" ++ testStr2
                                     |> parse ( p testStr1 <&> p testStr )
-                                    |> Expect.equal ( Failure <| "Start of " ++ testStr2 ++ " does not have any value which can be corectly parsed by: Path string, separated by &." )
+                                    |> Expect.equal ( Failure <| "Start of " ++ testStr2 ++ " does not have any value which can be correctly parsed by Path string, separated by &." )
                     , test "Incorrect ordered devider between paths" <|
                         \_ ->
                             let
@@ -486,7 +486,7 @@ suite =
                             in
                                 path
                                     |> parse (p testStr1 <*> p testStr2)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Path " ++ testStr1 ++ " or Path " ++ testStr2 ++ ", separated by *." )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Path " ++ testStr1 ++ " or Path " ++ testStr2 ++ ", separated by *." )     
                     , test "Incorrect ordered devider instead of unordered one between paths" <|
                         \_ ->
                             let
@@ -502,7 +502,7 @@ suite =
                             in
                                 path
                                     |> parse (p testStr1 <*> p testStr2)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Path " ++ testStr1 ++ " or Path " ++ testStr2 ++ ", separated by *." )      
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Path " ++ testStr1 ++ " or Path " ++ testStr2 ++ ", separated by *." )      
                     ]
                 ]
             , describe "Integer"
@@ -511,39 +511,39 @@ suite =
                         \_ ->
                             "10"
                                 |> parse int 
-                                |> Expect.equal ( Interger 10 ) 
+                                |> Expect.equal ( Integer 10 ) 
                     , describe "Ordered" <|
                         [ test "two ints" <|
                             \_ ->
                                 "10/9"
                                     |> parse  (int </> int) 
-                                    |> Expect.equal ( MultyValue <| Interger 10 :: Interger 9 :: [] )
+                                    |> Expect.equal ( MultiValue <| Integer 10 :: Integer 9 :: [] )
                         , test "int and path" <|
                             \_ ->
                                 "9/" ++ testStr
                                     |> parse (int </> p testStr)
-                                    |> Expect.equal ( Interger 9 )
+                                    |> Expect.equal ( Integer 9 )
                         , test "int and float" <|
                             \_ ->
                                 "10/9.123"
                                     |> parse  (int </> float) 
-                                    |> Expect.equal ( MultyValue <| Interger 10 :: Floating 9.123 :: [] )
+                                    |> Expect.equal ( MultiValue <| Integer 10 :: Floating 9.123 :: [] )
                         , test "int and string" <|
                             \_ ->
                                 "10/" ++ testStr
                                     |> parse  (int </> str) 
-                                    |> Expect.equal ( MultyValue <| Interger 10 :: Str testStr :: [] )
+                                    |> Expect.equal ( MultiValue <| Integer 10 :: Str testStr :: [] )
                         , test "int and any" <|
                             \_ ->
                                 "10/" ++ testStr
                                     |> parse  (int </> any) 
-                                    |> Expect.equal ( Interger 10 )
+                                    |> Expect.equal ( Integer 10 )
                         , test "int and query" <|
                             \_ ->
                                 "10/" ++ testStr ++ "=" ++ testStr
                                     |> parse (int </> query)
-                                    |> Expect.equal ( MultyValue 
-                                        [ Interger 10
+                                    |> Expect.equal ( MultiValue 
+                                        [ Integer 10
                                         , Query <| Dict.fromList [(testStr, testStr)]
                                         ]
                                     )
@@ -554,54 +554,54 @@ suite =
                                 \_ ->
                                      "10&" ++ testStr
                                         |> parse (int <&> p testStr)
-                                        |> Expect.equal ( Interger 10 ) 
+                                        |> Expect.equal ( Integer 10 ) 
                             , test "int or float" <|
                                 \_ ->
                                     "10&3.1415"
                                         |> parse (int <&> float )
-                                        |> Expect.equal ( MultyValue <| [Interger 10, Floating 3.1415] )
+                                        |> Expect.equal ( MultiValue <| [Integer 10, Floating 3.1415] )
                             , test "int or string" <|
                                 \_ ->
                                     "10*" ++ testStr
                                         |> parse (int <*> str)
-                                        |> Expect.equal ( MultyValue <| [Interger 10, Str testStr] )
+                                        |> Expect.equal ( MultiValue <| [Integer 10, Str testStr] )
                             , test "int or any" <|
                                 \_ ->
                                         "10&" ++ testStr
                                             |> parse ( int <&> any)
-                                            |> Expect.equal ( Interger 10 )
+                                            |> Expect.equal ( Integer 10 )
                             , test "int or query" <|
                                 \_ ->
                                     "10&" ++ testStr ++ "=" ++ testStr
                                         |> parse ( int <&> query )
-                                        |> Expect.equal (MultyValue <| [ Interger 10, Query <| Dict.fromList [(testStr, testStr)] ])
+                                        |> Expect.equal (MultiValue <| [ Integer 10, Query <| Dict.fromList [(testStr, testStr)] ])
                             ]
                         , describe "inverted"
                             [ test "int or path" <|
                                 \_ ->
                                      testStr ++ "&10"
                                         |> parse (int <&> p testStr)
-                                        |> Expect.equal ( Interger 10 ) 
+                                        |> Expect.equal ( Integer 10 ) 
                             , test "int or float" <|
                                 \_ ->
                                     "3.1415&10"
                                         |> parse (int <&> float )
-                                        |> Expect.equal ( MultyValue <| [Interger 10, Floating 3.1415] )
+                                        |> Expect.equal ( MultiValue <| [Integer 10, Floating 3.1415] )
                             , test "int or string" <|
                                 \_ ->
                                     testStr ++ "*10"
                                         |> parse (int <*> str)
-                                        |> Expect.equal ( MultyValue <| [Interger 10, Str testStr] )
+                                        |> Expect.equal ( MultiValue <| [Integer 10, Str testStr] )
                             , test "int or any" <|
                                 \_ ->
                                     testStr ++ "&10"
                                         |> parse ( int <&> any)
-                                        |> Expect.equal ( Interger 10 )
+                                        |> Expect.equal ( Integer 10 )
                             , test "int or query" <|
                                 \_ ->
                                     testStr ++ "=" ++ testStr ++ "&10"
                                         |> parse ( int <&> query )
-                                        |> Expect.equal (MultyValue <| [ Interger 10, Query <| Dict.fromList [(testStr, testStr)] ])
+                                        |> Expect.equal (MultiValue <| [ Integer 10, Query <| Dict.fromList [(testStr, testStr)] ])
                             ]
                         ]
                     ]
@@ -625,8 +625,8 @@ suite =
                         \_ ->
                             "10&a43"
                                 |> parse ( int <&> int )
-                                |> Expect.equal ( Failure <| "Start of a43 does not have any value which can be corectly parsed by: Int, separated by &." )
-                    , test "Incorrect ordered devider between paths" <|
+                                |> Expect.equal ( Failure <| "Start of a43 does not have any value which can be correctly parsed by Int, separated by &." )
+                    , test "Incorrect ordered divider between paths" <|
                         \_ ->
                             let
                                 path = "10/34"
@@ -641,7 +641,7 @@ suite =
                             in
                                 path
                                     |> parse (int <*> int)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Int or Int, separated by *." )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Int or Int, separated by *." )     
                     , test "Incorrect unordered devider instead of ordered one between paths" <|
                         \_ ->
                             let
@@ -649,7 +649,7 @@ suite =
                             in
                                 path
                                     |> parse (int <&> int)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Int or Int, separated by &."  )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Int or Int, separated by &."  )     
                     , test "Incorrect ordered devider instead of unordered one between paths" <|
                         \_ ->
                             let
@@ -672,7 +672,7 @@ suite =
                             \_ ->
                                 "3.1415/43.2"
                                     |> parse  (float </> float) 
-                                    |> Expect.equal ( MultyValue <| Floating 3.1415 :: Floating 43.2 :: [] )
+                                    |> Expect.equal ( MultiValue <| Floating 3.1415 :: Floating 43.2 :: [] )
                         , test "float and path" <|
                             \_ ->
                                 "3.1415/" ++ testStr
@@ -682,12 +682,12 @@ suite =
                             \_ ->
                                 "3.1415/9"
                                     |> parse  (float </> int) 
-                                    |> Expect.equal ( MultyValue <| Floating 3.1415 :: Interger 9 :: [] )
+                                    |> Expect.equal ( MultiValue <| Floating 3.1415 :: Integer 9 :: [] )
                         , test "float and string" <|
                             \_ ->
                                 "3.1415/" ++ testStr
                                     |> parse  (float </> str) 
-                                    |> Expect.equal ( MultyValue <| Floating 3.1415 :: Str testStr :: [] )
+                                    |> Expect.equal ( MultiValue <| Floating 3.1415 :: Str testStr :: [] )
                         , test "float and any" <|
                             \_ ->
                                 "3.1415/" ++ testStr
@@ -697,7 +697,7 @@ suite =
                             \_ ->
                                 "3.1415/" ++ testStr ++ "=" ++ testStr
                                     |> parse (float </> query)
-                                    |> Expect.equal ( MultyValue 
+                                    |> Expect.equal ( MultiValue 
                                         [ Floating 3.1415
                                         , Query <| Dict.fromList [(testStr, testStr)]
                                         ]
@@ -714,12 +714,12 @@ suite =
                                 \_ ->
                                     "3.1415&3"
                                         |> parse (float <&> int )
-                                        |> Expect.equal ( MultyValue <| [Floating 3.1415, Interger 3] )
+                                        |> Expect.equal ( MultiValue <| [Floating 3.1415, Integer 3] )
                             , test "float or string" <|
                                 \_ ->
                                     "3.1415*" ++ testStr
                                         |> parse (float <*> str)
-                                        |> Expect.equal ( MultyValue <| [Floating 3.1415, Str testStr] )
+                                        |> Expect.equal ( MultiValue <| [Floating 3.1415, Str testStr] )
                             , test "float or any" <|
                                 \_ ->
                                         "3.1415&" ++ testStr
@@ -729,7 +729,7 @@ suite =
                                 \_ ->
                                     "3.1415&" ++ testStr ++ "=" ++ testStr
                                         |> parse ( float <&> query )
-                                        |> Expect.equal (MultyValue <| [ Floating 3.1415, Query <| Dict.fromList [(testStr, testStr)] ])
+                                        |> Expect.equal (MultiValue <| [ Floating 3.1415, Query <| Dict.fromList [(testStr, testStr)] ])
                             ]
                         , describe "inverted"
                             [ describe "limitations" <|
@@ -737,7 +737,7 @@ suite =
                                         \_ ->
                                             "3&3.1415"
                                                 |> parse (float <&> int )
-                                                |> Expect.equal ( Failure "Start of 3.1415 does not have any value which can be corectly parsed by: Int, separated by &." )
+                                                |> Expect.equal ( Failure "Start of 3.1415 does not have any value which can be correctly parsed by Int, separated by &." )
 
                                     ]
                             , test "float or path" <|
@@ -749,7 +749,7 @@ suite =
                                 \_ ->
                                     testStr ++ "*3.1415"
                                         |> parse (float <*> str)
-                                        |> Expect.equal ( MultyValue <| [Floating 3.1415, Str testStr] )
+                                        |> Expect.equal ( MultiValue <| [Floating 3.1415, Str testStr] )
                             , test "float or any" <|
                                 \_ ->
                                     testStr ++ "&10"
@@ -759,7 +759,7 @@ suite =
                                 \_ ->
                                     testStr ++ "=" ++ testStr ++ "&10"
                                         |> parse ( float <&> query )
-                                        |> Expect.equal (MultyValue <| [ Floating 10, Query <| Dict.fromList [(testStr, testStr)] ])
+                                        |> Expect.equal (MultiValue <| [ Floating 10, Query <| Dict.fromList [(testStr, testStr)] ])
                             ]
                         ]
                     ]
@@ -783,7 +783,7 @@ suite =
                         \_ ->
                             "10&a43.0"
                                 |> parse ( float <&> float )
-                                |> Expect.equal ( Failure <| "Start of a43.0 does not have any value which can be corectly parsed by: Float, separated by &." )
+                                |> Expect.equal ( Failure <| "Start of a43.0 does not have any value which can be correctly parsed by Float, separated by &." )
                     , test "Incorrect ordered devider between paths" <|
                         \_ ->
                             let
@@ -799,7 +799,7 @@ suite =
                             in
                                 path
                                     |> parse (float <*> float)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Float or Float, separated by *." )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Float or Float, separated by *." )     
                     , test "Incorrect unordered devider instead of ordered one between paths" <|
                         \_ ->
                             let
@@ -807,7 +807,7 @@ suite =
                             in
                                 path
                                     |> parse (float <&> float)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Float or Float, separated by &."  )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Float or Float, separated by &."  )     
                     , test "Incorrect ordered devider instead of unordered one between paths" <|
                         \_ ->
                             let
@@ -830,7 +830,7 @@ suite =
                             \_ ->
                                 testStr1 ++ "/" ++ testStr2
                                     |> parse  (str </> str) 
-                                    |> Expect.equal ( MultyValue <| Str testStr1 :: Str testStr2 :: [] )
+                                    |> Expect.equal ( MultiValue <| Str testStr1 :: Str testStr2 :: [] )
                         , test "string and path" <|
                             \_ ->
                                 testStr1 ++ "/" ++ testStr2
@@ -840,12 +840,12 @@ suite =
                             \_ ->
                                 testStr ++ "/9"
                                     |> parse  (str </> int) 
-                                    |> Expect.equal ( MultyValue <| Str testStr :: Interger 9 :: [] )
+                                    |> Expect.equal ( MultiValue <| Str testStr :: Integer 9 :: [] )
                         , test "string and float" <|
                             \_ ->
                                 testStr ++ "/3.1415"
                                     |> parse  (str </> float) 
-                                    |> Expect.equal ( MultyValue <| Str testStr :: Floating 3.1415 :: [] )
+                                    |> Expect.equal ( MultiValue <| Str testStr :: Floating 3.1415 :: [] )
                         , test "string and any" <|
                             \_ ->
                                 testStr1 ++ "/" ++ testStr2
@@ -855,7 +855,7 @@ suite =
                             \_ ->
                                 testStr1 ++ "/" ++ testStr2 ++ "=" ++ testStr3
                                     |> parse (str </> query)
-                                    |> Expect.equal ( MultyValue 
+                                    |> Expect.equal ( MultiValue 
                                         [ Str testStr1
                                         , Query <| Dict.fromList [(testStr2, testStr3)]
                                         ]
@@ -872,12 +872,12 @@ suite =
                                 \_ ->
                                     testStr ++ "&3.1415"
                                         |> parse (str <&> float )
-                                        |> Expect.equal ( MultyValue <| [Str testStr, Floating 3.1415] )
+                                        |> Expect.equal ( MultiValue <| [Str testStr, Floating 3.1415] )
                             , test "string or int" <|
                                 \_ ->
                                     testStr ++ "*10"
                                         |> parse (str <*> int)
-                                        |> Expect.equal ( MultyValue <| [Str testStr, Interger 10] )
+                                        |> Expect.equal ( MultiValue <| [Str testStr, Integer 10] )
                             , test "string or any" <|
                                 \_ ->
                                     testStr1 ++ "&" ++ testStr2
@@ -887,7 +887,7 @@ suite =
                                 \_ ->
                                     testStr1 ++ "&" ++ testStr2 ++ "=" ++ testStr3
                                         |> parse ( str <&> query )
-                                        |> Expect.equal (MultyValue <| [ Str testStr1, Query <| Dict.fromList [(testStr2, testStr3)] ])
+                                        |> Expect.equal (MultiValue <| [ Str testStr1, Query <| Dict.fromList [(testStr2, testStr3)] ])
                             ]
                         , describe "inverted"
                             [ describe "limitations"
@@ -895,17 +895,17 @@ suite =
                                     \_ ->
                                         testStr2 ++ "&" ++ testStr1
                                             |> parse (str <&> p testStr2)
-                                            |> Expect.equal ( Failure <| "Start of " ++ testStr1 ++ " does not have any value which can be corectly parsed by: Path " ++ testStr2 ++ ", separated by &." )
+                                            |> Expect.equal ( Failure <| "Start of " ++ testStr1 ++ " does not have any value which can be correctly parsed by Path " ++ testStr2 ++ ", separated by &." )
                                 , test "string or float" <|
                                     \_ ->
                                         "3.1415&" ++ testStr
                                             |> parse (str <&> float )
-                                            |> Expect.equal ( Failure <| "Start of " ++ testStr ++ " does not have any value which can be corectly parsed by: Float, separated by &.")
+                                            |> Expect.equal ( Failure <| "Start of " ++ testStr ++ " does not have any value which can be correctly parsed by Float, separated by &.")
                                 , test "string or int" <|
                                     \_ ->
                                         "10*" ++ testStr
                                             |> parse (str <*> int)
-                                            |> Expect.equal ( Failure <| "Start of " ++ testStr ++ " does not have any value which can be corectly parsed by: Int, separated by *." )
+                                            |> Expect.equal ( Failure <| "Start of " ++ testStr ++ " does not have any value which can be correctly parsed by Int, separated by *." )
                                 , test "string or any" <|
                                     \_ ->
                                         "10&" ++ testStr
@@ -915,7 +915,7 @@ suite =
                                     \_ ->
                                         testStr2 ++ "=" ++ testStr3 ++ "&" ++ testStr1
                                             |> parse ( str <&> query )
-                                            |> Expect.equal (Failure <| "Start of " ++ testStr1 ++ " does not have any value which can be corectly parsed by: Query, separated by &.")
+                                            |> Expect.equal (Failure <| "Start of " ++ testStr1 ++ " does not have any value which can be correctly parsed by Query, separated by &.")
                                 ]
                             ]
                         ]
@@ -944,7 +944,7 @@ suite =
                             in
                                 path
                                     |> parse (str <*> str)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: String or String, separated by *." )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by String or String, separated by *." )     
                     , test "Incorrect unordered devider instead of ordered one between values" <|
                         \_ ->
                             let
@@ -952,7 +952,7 @@ suite =
                             in
                                 path
                                     |> parse (str <&> str)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: String or String, separated by &."  )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by String or String, separated by &."  )     
                     , test "Incorrect ordered devider instead of unordered one between values" <|
                         \_ ->
                             let
@@ -985,7 +985,7 @@ suite =
                             \_ ->
                                 testStr ++ "/9"
                                     |> parse  (any </> int) 
-                                    |> Expect.equal ( Interger 9 )
+                                    |> Expect.equal ( Integer 9 )
                         , test "any and float" <|
                             \_ ->
                                 testStr ++ "/3.1415"
@@ -1018,7 +1018,7 @@ suite =
                                 \_ ->
                                     testStr ++ "*10"
                                         |> parse (any <*> int)
-                                        |> Expect.equal ( Interger 10 )
+                                        |> Expect.equal ( Integer 10 )
                             , test "any or string" <|
                                 \_ ->
                                     testStr1 ++ "&" ++ testStr2
@@ -1036,22 +1036,22 @@ suite =
                                     \_ ->
                                         testStr2 ++ "&" ++ testStr1
                                             |> parse (any <&> p testStr2)
-                                            |> Expect.equal ( Failure <| "Start of " ++ testStr1 ++ " does not have any value which can be corectly parsed by: Path " ++ testStr2 ++ ", separated by &." )
+                                            |> Expect.equal ( Failure <| "Start of " ++ testStr1 ++ " does not have any value which can be correctly parsed by Path " ++ testStr2 ++ ", separated by &." )
                                 , test "any or float" <|
                                     \_ ->
                                         "3.1415&" ++ testStr
                                             |> parse (any <&> float )
-                                            |> Expect.equal ( Failure <| "Start of " ++ testStr ++ " does not have any value which can be corectly parsed by: Float, separated by &.")
+                                            |> Expect.equal ( Failure <| "Start of " ++ testStr ++ " does not have any value which can be correctly parsed by Float, separated by &.")
                                 , test "any or int" <|
                                     \_ ->
                                         "10*" ++ testStr
                                             |> parse (any <*> int)
-                                            |> Expect.equal ( Failure <| "Start of " ++ testStr ++ " does not have any value which can be corectly parsed by: Int, separated by *." )
+                                            |> Expect.equal ( Failure <| "Start of " ++ testStr ++ " does not have any value which can be correctly parsed by Int, separated by *." )
                                 , test "any or query" <|
                                     \_ ->
                                         testStr2 ++ "=" ++ testStr3 ++ "&" ++ testStr1
                                             |> parse ( any <&> query )
-                                            |> Expect.equal (Failure <| "Start of " ++ testStr1 ++ " does not have any value which can be corectly parsed by: Query, separated by &.")
+                                            |> Expect.equal (Failure <| "Start of " ++ testStr1 ++ " does not have any value which can be correctly parsed by Query, separated by &.")
                                 ]
                             , test "any or string" <|
                                 \_ ->
@@ -1085,7 +1085,7 @@ suite =
                             in
                                 path
                                     |> parse (any <*> any)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Any or Any, separated by *." )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Any or Any, separated by *." )     
                     , test "Incorrect unordered devider instead of ordered one between values" <|
                         \_ ->
                             let
@@ -1093,7 +1093,7 @@ suite =
                             in
                                 path
                                     |> parse (any <&> any)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Any or Any, separated by &."  )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Any or Any, separated by &."  )     
                     , test "Incorrect ordered devider instead of unordered one between values" <|
                         \_ ->
                             let
@@ -1116,7 +1116,7 @@ suite =
                             \_ ->
                                 testStr1 ++ "=" ++ testStr2 ++ "/" ++ testStr3 ++ "=" ++ testStr4
                                     |> parse  (query </> query) 
-                                    |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Query <| Dict.fromList [(testStr3, testStr4)]] )
+                                    |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Query <| Dict.fromList [(testStr3, testStr4)]] )
                         , test "query and path" <|
                             \_ ->
                                 testStr1 ++ "=" ++ testStr2 ++ "/" ++ testStr3
@@ -1126,17 +1126,17 @@ suite =
                             \_ ->
                                 testStr1 ++ "=" ++ testStr2 ++ "/9"
                                     |> parse  (query </> int) 
-                                    |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Interger 9] )
+                                    |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Integer 9] )
                         , test "query and float" <|
                             \_ ->
                                 testStr1 ++ "=" ++ testStr2 ++ "/3.1415"
                                     |> parse  (query </> float) 
-                                    |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Floating 3.1415] )
+                                    |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Floating 3.1415] )
                         , test "query and string" <|
                             \_ ->
                                 testStr1 ++ "=" ++ testStr2 ++ "/" ++ testStr3
                                     |> parse  (query </> str) 
-                                    |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Str testStr3] )
+                                    |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Str testStr3] )
                         , test "query and any" <|
                             \_ ->
                                 testStr2 ++ "=" ++ testStr3 ++ "/" ++ testStr1
@@ -1149,7 +1149,7 @@ suite =
                                 \_ ->
                                     testStr1 ++ "=" ++ testStr2 ++ "&" ++ testStr3 ++ "=" ++ testStr4
                                         |> parse  (query <&> query) 
-                                        |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Query <| Dict.fromList [(testStr3, testStr4)]] )
+                                        |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Query <| Dict.fromList [(testStr3, testStr4)]] )
                             , test "query and path" <|
                                 \_ ->
                                     testStr1 ++ "=" ++ testStr2 ++ "*" ++ testStr3
@@ -1159,17 +1159,17 @@ suite =
                                 \_ ->
                                     testStr1 ++ "=" ++ testStr2 ++ "&9"
                                         |> parse  (query <&> int) 
-                                        |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Interger 9] )
+                                        |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Integer 9] )
                             , test "query and float" <|
                                 \_ ->
                                     testStr1 ++ "=" ++ testStr2 ++ "*3.1415"
                                         |> parse  (query <*> float) 
-                                        |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Floating 3.1415] )
+                                        |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Floating 3.1415] )
                             , test "query and string" <|
                                 \_ ->
                                     testStr1 ++ "=" ++ testStr2 ++ "*" ++ testStr3
                                         |> parse  (query <*> str) 
-                                        |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Str testStr3] )
+                                        |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Str testStr3] )
                             , test "query and any" <|
                                 \_ ->
                                     testStr2 ++ "=" ++ testStr3 ++ "&" ++ testStr1
@@ -1181,7 +1181,7 @@ suite =
                                 \_ ->
                                     testStr4 ++ "=" ++ testStr3 ++ "&" ++ testStr2 ++ "=" ++ testStr1
                                         |> parse  (query <&> query) 
-                                        |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr4, testStr3)], Query <| Dict.fromList [(testStr2, testStr1)]] )
+                                        |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr4, testStr3)], Query <| Dict.fromList [(testStr2, testStr1)]] )
                             , test "query and path" <|
                                 \_ ->
                                     testStr3 ++ "*" ++ testStr1 ++ "=" ++ testStr2
@@ -1191,17 +1191,17 @@ suite =
                                 \_ ->
                                     "9&" ++ testStr1 ++ "=" ++ testStr2 
                                         |> parse  (query <&> int) 
-                                        |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Interger 9] )
+                                        |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Integer 9] )
                             , test "query and float" <|
                                 \_ ->
                                     "3.1415*" ++ testStr1 ++ "=" ++ testStr2
                                         |> parse  (query <*> float) 
-                                        |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Floating 3.1415] )
+                                        |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Floating 3.1415] )
                             , test "query and string" <|
                                 \_ ->
                                     testStr3 ++ "*" ++ testStr1 ++ "=" ++ testStr2
                                         |> parse  (query <*> str) 
-                                        |> Expect.equal ( MultyValue [Query <| Dict.fromList [(testStr1, testStr2)], Str testStr3] )
+                                        |> Expect.equal ( MultiValue [Query <| Dict.fromList [(testStr1, testStr2)], Str testStr3] )
                             , test "query and any" <|
                                 \_ ->
                                     testStr1 ++ "&" ++ testStr2 ++ "=" ++ testStr3 
@@ -1234,7 +1234,7 @@ suite =
                             in
                                 path
                                     |> parse (query <*> query)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Query or Query, separated by *." )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Query or Query, separated by *." )     
                     , test "Incorrect unordered devider instead of ordered one between values" <|
                         \_ ->
                             let
@@ -1242,7 +1242,7 @@ suite =
                             in
                                 path
                                     |> parse (query <&> query)
-                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be corectly parsed by: Query or Query, separated by &."  )     
+                                    |> Expect.equal (Failure <| "Start of " ++ path ++ " does not have any value which can be correctly parsed by Query or Query, separated by &."  )     
                     , test "Incorrect ordered devider instead of unordered one between values" <|
                         \_ ->
                             let
