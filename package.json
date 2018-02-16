@@ -1,6 +1,6 @@
 {
   "name": "pathfinder",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "eDSL for URL parsing",
   "main": "main.elm",
   "scripts": {
