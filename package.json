@@ -1,11 +1,11 @@
 {
   "name": "pathfinder",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "eDSL for URL parsing",
   "main": "main.elm",
   "scripts": {
     "doc": "elm-make --docs=documentation.json",
-    "build": "elm make src/main.elm --output=dist/main.js",
+    "publish": "elm-package publish",
     "install": "elm-package install --yes",
     "elm": "elm",
     "test": "elm-test --watch"
