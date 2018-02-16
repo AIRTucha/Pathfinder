@@ -1,7 +1,9 @@
 # Pathfinder
 [![Build Status](https://travis-ci.org/AIRTucha/Pathfinder.svg?branch=master)](https://travis-ci.org/AIRTucha/Pathfinder)
 
-An embedded DSL for parsing of URL. It is designed for processing URLs of any complexity.
+An embedded DSL for a typesafe parsing of URL. It is designed for processing URLs of any complexity. 
+
+The library can parse single value, multiple values with the strict or arbitrary order and queries. It also allows writing typesafe parser for a query.
 
 The library contains two main parts:
 
@@ -21,6 +23,7 @@ parseName url =
         _ ->
             Nothing
 
+
 parseName "someUrl/userName"  -- Just "userName"
 ```
 Parsing of an integer from a path which contains a query.
@@ -34,6 +37,7 @@ parseQuery url =
         _ ->
             Nothing
 
+
 parseQuery "someUrl?age=10"  -- Just 10
 ```
 Parsing of multiple values.
@@ -46,6 +50,7 @@ parseNameAndId url =
                 
         _ ->
             Nothing
+
 
 parseNameAndId "someUrl/userName/1/someRandomStuff"  -- Just ("userName", 1)
 ```
@@ -62,6 +67,7 @@ getDevider url =
         
         _ ->
             Err "Unexpected path."
+
 
 getDevider "10*3.1415"  -- Err "10*3.1415 does not contain /"
 ```

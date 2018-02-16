@@ -4,6 +4,7 @@
   "description": "eDSL for URL parsing",
   "main": "main.elm",
   "scripts": {
+    "doc": "elm-make --docs=documentation.json",
     "build": "elm make src/main.elm --output=dist/main.js",
     "install": "elm-package install --yes",
     "elm": "elm",

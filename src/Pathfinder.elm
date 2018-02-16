@@ -1,6 +1,87 @@
-module Pathfinder exposing(..)
+module Pathfinder exposing
+    ( int
+    , float
+    , p
+    , str
+    , any
+    , query
+    , toString
+    , parse
+    , (</>)
+    , (<=>)
+    , (<?>)
+    , (<&>)
+    , (<*>)
+    , (<%>)
+    , orderedDevider
+    , unorderedDevider
+    , ParsingResult(..)
+    , URL(..)
+    , ParseNode(..)
+    )
 
-{-| The library contains two main parts:
+{-| Typesafe eDSL for URL parsing. The library can parse single value, multiple values with a strict or arbitrary order, queries. It also allows writing typesafe parser for a query.
+
+# Parsing nodes
+
+Shortcut functions which handle creation of parsing nodes.
+
+@docs int
+    , float
+    , p
+    , str
+    , any
+    , query
+
+# Ordered Dividers
+
+Predefined infix operators for an ordered combination of parsing nodes.
+
+    url = int </> str
+
+    parse url "10/somevalue" 
+    -- MultiValue [ Integer 10, Str "somevalue" ]
+
+    parse url "somevalue/10" 
+    -- Failuer "could not convert string 'somevalue' to an Int"
+
+@docs (</>)
+    , (<=>)
+    , (<?>)
+
+# Unordered Dividers
+
+Predefined infix operators for an unordered combination of parsing nodes.
+
+    url = int <&> str
+
+    parse url "10&somevalue" 
+    -- MultiValue [ Integer 10, Str "somevalue" ]
+
+    parse url "somevalue&10" 
+    -- MultiValue [ Integer 10, Str "somevalue" ]
+
+@docs (<&>)
+    , (<*>)
+    , (<%>)
+
+# Dividers factory
+
+Abstract factories for creation of custom parsing node combinators
+
+@docs orderedDevider
+    , unorderedDevider
+
+# Functions
+
+@docs parse
+    , toString
+
+# Data Structures
+
+@docs  ParsingResult
+    , URL
+    , ParseNode
 -}
 
 
@@ -17,7 +98,7 @@ import Tuple
 
 {-| Parsing options
 -}
-type SubURL 
+type ParseNode 
     = ParsePath String
     | ParseFloat
     | ParseInt
@@ -26,21 +107,21 @@ type SubURL
     | ParseQuery
 
 
-{-| Nodes of parsing tree
+{-| Parsing tree
 -}
 type URL
     = OrderedURL Char URL URL
     | UnorderedURL Char (List URL)
-    | NodeURL SubURL
+    | NodeURL ParseNode
 
 
 {-| Possible parsing results
 -}
-type URLValue
+type ParsingResult
     = Integer Int
     | Floating Float
     | Str String
-    | MultiValue (List URLValue)
+    | MultiValue (List ParsingResult)
     | Failure String
     | Query (Dict String String)
     | Succes
@@ -138,14 +219,14 @@ toString url =
 
 -- PUBLIC API
 
-{-| Performs parsing of a string in according with provided parsing tree.
+{-| Performs parsing of a string in according to provided parsing tree.
 
     parse (p "path" </> float) "path/3.1415"                    -- Floating 3.1415
     parse (any <?> (p "name" <=> str)) "someStrangeStuff?name   -- Str "name"
     parse (str <&> int) "19&somePath"                           -- MultiValue [ Integer 19, String "somePath" ]
     parse (p "path" </> any) "somePath/otherPath"               -- Succes
 -}
-parse : URL -> String -> URLValue
+parse : URL -> String -> ParsingResult
 parse value string =
     case parsingLoop value [] string Nothing of
         Ok ( result, "" ) ->
@@ -188,6 +269,12 @@ parse value string =
 (<*>) = unorderedDevider '*'
 
 
+{-| Infix shortcut for a function which creates an unordered parsing tree from subnodes provided as arguments which are separated by %.
+-}
+(<%>): URL -> URL -> URL
+(<%>) = unorderedDevider '%'
+
+
 {-| Creates an ordered parsing tree from subnodes provided as arguments which are separated by specified Char.
 
 It can be used for the creation of nice infix shortcuts.
@@ -224,7 +311,7 @@ unorderedDevider char url1 url2 =
 
 {-| Iterates over parsing tree and tries to parse it part by part.
 -}
-parsingLoop : URL -> (List URLValue) -> String -> Maybe Char -> Result (String) ( List URLValue, String )
+parsingLoop : URL -> (List ParsingResult) -> String -> Maybe Char -> Result (String) ( List ParsingResult, String )
 parsingLoop url result string tailChar =
     case url of
         OrderedURL char suburl nextURL ->
@@ -257,10 +344,10 @@ parseUnordered
     -> Maybe Char 
     -> String 
     -> List (Int, URL) 
-    -> List (Int, List URLValue) 
-    -> List (Int, List URLValue)  
+    -> List (Int, List ParsingResult) 
+    -> List (Int, List ParsingResult)  
     -> List (Int, URL) 
-    -> Result String (List URLValue, String)
+    -> Result String (List ParsingResult, String)
 parseUnordered char tailChar string prevUrls result curResult urls =
     case urls of 
         [] ->
@@ -302,10 +389,10 @@ parseUnordered char tailChar string prevUrls result curResult urls =
                     Err _ ->
                         parseUnordered char tailChar string ((i, url) :: prevUrls) result curResult restOfUrls
 
-{-| Performs flattening of the nested URLValue list.
+{-| Performs flattening of the nested ParsingResult list.
 Processing is aborted in case of the first Failure which is reported as Err.
 -}
-flattenUtilFailure: List URLValue -> List( List URLValue ) -> Result String (List URLValue)
+flattenUtilFailure: List ParsingResult -> List( List ParsingResult ) -> Result String (List ParsingResult)
 flattenUtilFailure accum result =
     case result of 
         [] ->
@@ -322,7 +409,7 @@ flattenUtilFailure accum result =
 
 {-| Iterates over a list of URL values and tries to find any Failure.
 -}
-findFailure: List URLValue -> Maybe String
+findFailure: List ParsingResult -> Maybe String
 findFailure result =
     case result of 
         [] ->
@@ -353,10 +440,10 @@ zipIndex list =
 {-| Parse a single parsing node.
 -}
 parseNode
-    : List URLValue
-    -> SubURL
+    : List ParsingResult
+    -> ParseNode
     -> ( String, a )
-    -> Result String ( List URLValue, a )
+    -> Result String ( List ParsingResult, a )
 parseNode result node strings =
     case node of
         ParsePath path ->
@@ -451,7 +538,7 @@ checkEqual path (string, tail) =
 
 {-| Prepare URLValues for an output.
 -}
-makeValue: (List URLValue) -> URLValue
+makeValue: (List ParsingResult) -> ParsingResult
 makeValue list =
     case list of
         head :: [] ->

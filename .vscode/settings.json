@@ -1,3 +1,6 @@
 {
-    "elm.makeCommand": "./node_modules/.bin/elm-make"
+    "elm.makeCommand": "./node_modules/.bin/elm-make",
+    "cSpell.words": [
+        "typesafe"
+    ]
 }
