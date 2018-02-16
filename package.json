@@ -11,7 +11,7 @@
     "test": "elm-test --watch"
   },
   "author": "airtucha",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "elm": "^0.18.0"
   },
