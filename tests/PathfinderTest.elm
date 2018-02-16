@@ -134,7 +134,7 @@ suite =
                 , test "three simple nodes" <|
                     \_ -> 
                         float </> int <?> p testStr 
-                            |> Expect.equal ( OrderedURL '/' (NodeURL ParseFloat) <| OrderedURL '?' (NodeURL ParseInt) (NodeURL <| ParsePath testStr) )
+                            |> Expect.equal ( OrderedURL '?' (OrderedURL '/' (NodeURL ParseFloat) (NodeURL ParseInt)) (NodeURL (ParsePath "string")) )
                 , test "three simple nodes, left" <|
                     \_ -> 
                         float <?> (int </> p testStr)
@@ -146,7 +146,7 @@ suite =
                 , test "node and two other nodes devided unorderedly" <|
                     \_ -> 
                         float </> int <&> p testStr 
-                            |> Expect.equal ( OrderedURL '/' (NodeURL ParseFloat) ( UnorderedURL '&' [NodeURL ParseInt,NodeURL (ParsePath testStr)] ) )
+                            |> Expect.equal ( UnorderedURL '&' ([OrderedURL '/' (NodeURL ParseFloat) (NodeURL ParseInt),NodeURL (ParsePath "string")]))
                 , test "node and two other nodes devided unorderedly, left" <|
                     \_ -> 
                         (float </> int) <&> p testStr 
