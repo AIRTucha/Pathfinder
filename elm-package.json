@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "eDSL for typesage URL parsing",
-    "repository": "https://github.com/airtucha/board.git",
+    "repository": "https://github.com/airtucha/pathfinder.git",
     "license": "MIT",
     "source-directories": [
         "src",

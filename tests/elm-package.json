@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
-    "summary": "Test Suites",
-    "repository": "https://github.com/airtucha/board.git",
+    "summary": "Test suit for typesafe URL parsing eDSL",
+    "repository": "https://github.com/airtucha/pathfinder.git",
     "license": "MIT",
     "source-directories": [
         "../src",
