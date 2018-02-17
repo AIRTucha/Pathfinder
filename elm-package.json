@@ -1,6 +1,6 @@
 {
     "version": "1.0.0",
-    "summary": "Elm Back-end framework",
+    "summary": "eDSL for typesage URL parsing",
     "repository": "https://github.com/airtucha/board.git",
     "license": "MIT",
     "source-directories": [
