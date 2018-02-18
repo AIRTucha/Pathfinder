@@ -2,7 +2,6 @@
   "name": "pathfinder",
   "version": "1.0.0",
   "description": "eDSL for URL parsing",
-  "main": "main.elm",
   "scripts": {
     "doc": "elm-make --docs=documentation.json",
     "publish": "elm-package publish",
