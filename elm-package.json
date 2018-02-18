@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "summary": "eDSL for typesafe URL parsing",
     "repository": "https://github.com/airtucha/pathfinder.git",
     "license": "MIT",
