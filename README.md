@@ -1,5 +1,5 @@
 # Pathfinder
-[![Build Status](https://travis-ci.org/AIRTucha/Pathfinder.svg?branch=master)](https://travis-ci.org/AIRTucha/Pathfinder)
+[![Build Status](https://travis-ci.org/AIRTucha/pathfinder.svg?branch=master)](https://travis-ci.org/AIRTucha/pathfinder)
 
 An embedded DSL for a typesafe parsing of URL. It is designed for processing URLs of any complexity. 
 
