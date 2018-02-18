@@ -1,13 +1,14 @@
 {
   "name": "pathfinder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "eDSL for URL parsing",
   "scripts": {
     "doc": "elm-make --docs=documentation.json",
     "publish": "elm-package publish",
     "install": "elm-package install --yes",
     "elm": "elm",
-    "test": "elm-test --watch"
+    "test": "elm-test --watch",
+    "bump": "elm-package bump"
   },
   "author": "airtucha",
   "license": "MIT",
