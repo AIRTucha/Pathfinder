@@ -1,6 +1,6 @@
 {
   "name": "pathfinder",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "eDSL for URL parsing",
   "scripts": {
     "doc": "elm-make --docs=documentation.json",

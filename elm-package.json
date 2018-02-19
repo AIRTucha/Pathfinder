@@ -1,7 +1,7 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "summary": "eDSL for typesafe URL parsing",
-    "repository": "https://github.com/airtucha/pathfinder.git",
+    "repository": "https://github.com/AIRTucha/pathfinder.git",
     "license": "MIT",
     "source-directories": [
         "src",
