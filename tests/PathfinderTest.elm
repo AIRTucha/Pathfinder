@@ -355,13 +355,13 @@ suite =
                         \_ ->
                             testStr   
                                 |> parse (p testStr)
-                                |> Expect.equal Succes
+                                |> Expect.equal Success
                     , describe "Ordered" <|
                         [ test "two paths" <|
                             \_ ->
                                 testStr ++ "/" ++ testStr
                                     |> parse (p testStr </> p testStr)
-                                    |> Expect.equal Succes
+                                    |> Expect.equal Success
                         , test "path and int" <|
                             \_ ->
                                 testStr ++ "/10"
@@ -381,7 +381,7 @@ suite =
                             \_ ->
                                 testStr ++ "/" ++ testStr
                                     |> parse (p testStr </> any)
-                                    |> Expect.equal ( Succes )
+                                    |> Expect.equal ( Success )
                         , test "path and query" <|
                             \_ ->
                                 testStr ++ "/" ++ testStr ++ "=" ++ testStr
@@ -394,7 +394,7 @@ suite =
                                 \_ ->
                                     testStr1 ++ "*" ++ testStr2
                                         |> parse (p testStr1 <*> p testStr2)
-                                        |> Expect.equal Succes
+                                        |> Expect.equal Success
                             , test "path or int" <|
                                 \_ ->
                                     testStr ++ "&10"
@@ -414,7 +414,7 @@ suite =
                                 \_ ->
                                     testStr1 ++ "&" ++ testStr2
                                         |> parse (p testStr1 <&> any)
-                                        |> Expect.equal ( Succes )
+                                        |> Expect.equal ( Success )
                             , test "path or query" <|
                                 \_ ->
                                     testStr ++ "&" ++ testStr ++ "=" ++ testStr
@@ -426,7 +426,7 @@ suite =
                                 \_ ->
                                     testStr2 ++ "*" ++ testStr1
                                         |> parse (p testStr1 <*> p testStr2)
-                                        |> Expect.equal Succes
+                                        |> Expect.equal Success
                             , test "path or int" <|
                                 \_ ->
                                     "10&" ++ testStr
@@ -446,7 +446,7 @@ suite =
                                 \_ ->
                                     testStr2 ++ "&" ++ testStr1
                                         |> parse (p testStr1 <&> any)
-                                        |> Expect.equal ( Succes )
+                                        |> Expect.equal ( Success )
                             , test "path or query" <|
                                 \_ ->
                                     testStr1 ++ "&" ++ testStr2 ++ "=" ++ testStr
@@ -969,18 +969,18 @@ suite =
                         \_ ->
                             testStr
                                 |> parse any 
-                                |> Expect.equal ( Succes ) 
+                                |> Expect.equal ( Success ) 
                     , describe "Ordered" <|
                         [ test "two any" <|
                             \_ ->
                                 testStr1 ++ "/" ++ testStr2
                                     |> parse  (any </> any) 
-                                    |> Expect.equal ( Succes )
+                                    |> Expect.equal ( Success )
                         , test "any and path" <|
                             \_ ->
                                 testStr1 ++ "/" ++ testStr2
                                     |> parse (any </> p testStr2)
-                                    |> Expect.equal ( Succes )
+                                    |> Expect.equal ( Success )
                         , test "any and int" <|
                             \_ ->
                                 testStr ++ "/9"
@@ -1008,7 +1008,7 @@ suite =
                                 \_ ->
                                     testStr1 ++ "&" ++ testStr2
                                         |> parse (any <&> p testStr2)
-                                        |> Expect.equal ( Succes ) 
+                                        |> Expect.equal ( Success ) 
                             , test "any or float" <|
                                 \_ ->
                                     testStr ++ "&3.1415"

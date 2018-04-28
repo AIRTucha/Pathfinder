@@ -124,14 +124,15 @@ type ParsingResult
     | MultiValue (List ParsingResult)
     | Failure String
     | Query (Dict String String)
-    | Succes
+    | Success
 
 
 -- SHORTCUTS FOR BUILDING OF PARSING TREE
 
 {-| A shortcut for creation of a parsing node for Float
 
-    parse float "3.1415" 
+    parse float "3.1415"
+    -- Floating 3.1415
 -}
 float : URL
 float =
@@ -140,7 +141,8 @@ float =
 
 {-| A shortcut for creation of a parsing node for Int
 
-    parse int "13" 
+    parse int "13"
+    -- Integer 13
 -}
 int : URL
 int =
@@ -149,7 +151,8 @@ int =
 
 {-| A shortcut for creation of a parsing node which specifies precise part of a path
 
-    parse (p "someUrl" </> int ) "someUrl/10"
+    parse ( p "someUrl" </> int ) "someUrl/10"
+    -- Integer 10
 -}
 p : String -> URL
 p string =
@@ -159,6 +162,7 @@ p string =
 {-| A shortcut for creation of a parsing node for String
 
     parse str "name"
+    -- Success
 -}
 str: URL 
 str = 
@@ -168,6 +172,7 @@ str =
 {-| A shortcut for creation of a parsing node which skips a part of the path
 
     parse (int </> any </> float) "10/some&strange?stuff/3.1415"
+    -- MultiValue [ Integer 10, Floating 3.1415 ]
 -}
 any: URL
 any = 
@@ -177,6 +182,7 @@ any =
 {-| A shortcut for creation of a parsing node for an old good url query
 
     parse (query) "value1=10&value2=13&value3=name"
+    -- Dict.fromList [ ("value1", "10"), ("value2", "13"), ("value3", "name") ]
 -}
 query : URL
 query =
@@ -222,9 +228,9 @@ toString url =
 {-| Performs parsing of a string in according to provided parsing tree.
 
     parse (p "path" </> float) "path/3.1415"                    -- Floating 3.1415
-    parse (any <?> (p "name" <=> str)) "someStrangeStuff?name   -- Str "name"
+    parse (any <?> (p "name" <=> str)) "someStrangeStuff?name"  -- Str "name"
     parse (str <&> int) "19&somePath"                           -- MultiValue [ Integer 19, String "somePath" ]
-    parse (p "path" </> any) "somePath/otherPath"               -- Succes
+    parse (p "path" </> any) "somePath/otherPath"               -- Success
 -}
 parse : URL -> String -> ParsingResult
 parse value string =
@@ -548,7 +554,7 @@ makeValue list =
             MultiValue <| reverse list 
         
         [] ->
-            Succes
+            Success
 
 
 {-| Merge unordered parsing trees in according to append function.
