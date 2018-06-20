@@ -20,6 +20,7 @@ install:
   - cd tests
   - npm install
   - npm run install
+  - cd ..
 
 script:
   - npm run ci:test
