@@ -8,6 +8,7 @@
     "install": "elm-package install --yes",
     "elm": "elm",
     "test": "elm-test --watch",
+    "ci:test": "elm-test",
     "bump": "elm-package bump"
   },
   "author": "airtucha",
