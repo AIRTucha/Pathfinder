@@ -2,7 +2,8 @@ module Break exposing(break)
 
 import String exposing( uncons, fromChar )
 
-
+{-| Splits the string by the char once, if it is possible, from left to right
+-}
 break: Char -> String -> Result String ( String, String )
 break char string =
     case splitOnce char "" string of
