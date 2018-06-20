@@ -227,10 +227,10 @@ toString url =
 
 {-| Performs parsing of a string in according to provided parsing tree.
 
-    parse (p "path" </> float) "path/3.1415"                    -- Floating 3.1415
-    parse (any <?> (p "name" <=> str)) "someStrangeStuff?name"  -- Str "name"
-    parse (str <&> int) "19&somePath"                           -- MultiValue [ Integer 19, String "somePath" ]
-    parse (p "path" </> any) "somePath/otherPath"               -- Success
+    parse (p "path" </> float) "path/3.1415"                         -- Floating 3.1415
+    parse (any <?> (p "name" <=> str)) "someStrangeStuff?name=test"  -- Str "test"
+    parse (int <&> float) "3.14&9"                                   -- MultiValue [ Integer 9, Floating 3.14 ]
+    parse (p "somePath" </> any) "somePath/otherPath"                -- Success
 -}
 parse : URL -> String -> ParsingResult
 parse value string =
