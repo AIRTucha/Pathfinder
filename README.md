@@ -1,6 +1,9 @@
 # Pathfinder
 [![Build Status](https://travis-ci.org/AIRTucha/pathfinder.svg?branch=master)](https://travis-ci.org/AIRTucha/pathfinder)
 
+PROJECT IS DEPRECATED SINCE NEW VERSIONS OF ELM DOES NOT SUPPORT INFIX 
+which is heavily used by the DSL.
+
 An embedded DSL for a typesafe parsing of URL. It is designed for processing URLs of any complexity. 
 
 The library can parse single value, multiple values with the strict or arbitrary order and queries. It also allows writing typesafe parser for a query.
