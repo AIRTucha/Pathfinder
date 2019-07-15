@@ -3,13 +3,12 @@
   "version": "2.0.1",
   "description": "eDSL for URL parsing",
   "scripts": {
-    "doc": "elm-make --docs=documentation.json",
-    "publish": "elm-package publish",
-    "install": "elm-package install --yes",
+    "doc": "elm make --docs=documentation.json",
+    "publish": "elm package publish",
     "elm": "elm",
-    "test": "elm-test --watch",
-    "ci:test": "elm-test",
-    "bump": "elm-package bump"
+    "test": "elm test --watch",
+    "ci:test": "elm test",
+    "bump": "elm package bump"
   },
   "author": "airtucha",
   "license": "MIT",

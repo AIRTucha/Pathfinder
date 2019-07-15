@@ -16,10 +16,8 @@ os:
 
 install:
   - npm install
-  - npm run install
   - cd tests
   - npm install
-  - npm run install
   - cd ..
 
 script:
