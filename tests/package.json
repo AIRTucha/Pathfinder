@@ -2,10 +2,12 @@
   "name": "board",
   "version": "0.0.1",
   "description": "Test Suites",
-  "scripts": { },
+  "scripts": {
+    "install": "elm-package install --yes"
+  },
   "author": "airtucha",
   "license": "ISC",
   "dependencies": {
-    "elm": "^0.19.0"
+    "elm": "^0.18.0"
   }
 }

@@ -1,7 +1,7 @@
 sudo: false
 
 language: node_js
-node_js: '8'
+node_js: node
 
 cache:
   directories:
@@ -16,8 +16,10 @@ os:
 
 install:
   - npm install
+  - npm run install
   - cd tests
   - npm install
+  - npm run install
   - cd ..
 
 script:

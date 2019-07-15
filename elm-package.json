@@ -1,5 +1,5 @@
 {
-    "version": "2.0.1",
+    "version": "2.0.0",
     "summary": "eDSL for typesafe URL parsing",
     "repository": "https://github.com/AIRTucha/pathfinder.git",
     "license": "MIT",
@@ -14,5 +14,5 @@
         "elm-community/elm-test": "4.0.0 <= v < 5.0.0",
         "elm-lang/core": "5.1.1 <= v < 6.0.0"
     },
-    "elm-version": "0.18.0 <= v <= 0.19.0"
+    "elm-version": "0.18.0 <= v < 0.19.0"
 }
